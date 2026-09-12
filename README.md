@@ -28,11 +28,6 @@ off-grid villages. Reads TDS, turbidity, and pH via MQTT over TLS.
 ESP32-based electrical monitoring system with early-warning detection and
 remote push notifications.  
 `C++` `ESP32` `Embedded Systems`
-
-**[strudel-code](https://github.com/hamin-baek/strudel-code)**  
-Algorithmic music patterns — polyrhythmic compositions written entirely in code.  
-`JavaScript` `Strudel` `Live Coding`
-
 ---
 
 ## Stack
