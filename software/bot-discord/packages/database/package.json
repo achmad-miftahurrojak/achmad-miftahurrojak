@@ -1,0 +1,22 @@
+{
+  "name": "@hamin/database",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "types": "index.ts",
+  "scripts": {
+    "db:push": "prisma db push",
+    "db:generate": "prisma generate",
+    "db:studio": "prisma studio",
+    "test": "tsx --test events.test.ts eventBus.test.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.10.0",
+    "pg": "^8.23.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.23.1",
+    "prisma": "^5.10.0",
+    "tsx": "^4.23.12",
+    "typescript": "^5.0.0"
+  }
+}
