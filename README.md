@@ -10,10 +10,7 @@ Indonesian developer focused on embedded systems and IoT engineering.
 
 ## About
 
-I build systems meant to work in the real world — sensors that monitor
-drinking water in off-grid villages, early-warning tools for electrical
-failures, and bots that keep communities running. When I'm not writing
-C++ or JavaScript, I write code that makes music.
+I build embedded systems designed for real-world impact. My projects include water quality monitors for off-grid villages, early-warning tools for electrical failures, and automated systems for community management. Beyond C++ and JavaScript, I also explore algorithmic music composition.
 
 ---
 
@@ -28,6 +25,7 @@ off-grid villages. Reads TDS, turbidity, and pH via MQTT over TLS.
 ESP32-based electrical monitoring system with early-warning detection and
 remote push notifications.  
 `C++` `ESP32` `Embedded Systems`
+
 ---
 
 ## Stack
