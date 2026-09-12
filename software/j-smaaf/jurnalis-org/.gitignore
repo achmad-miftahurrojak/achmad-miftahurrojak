@@ -5,3 +5,10 @@ dist/
 .env.local
 *.log
 .DS_Store
+
+**/.env*
+!**/.env.example
+**/node_modules/
+**/dist/
+node_modules
+

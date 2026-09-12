@@ -25,3 +25,10 @@ data/*.rusak-*
 skills-lock.json
 
 *.log
+
+**/.env*
+!**/.env.example
+**/node_modules/
+**/dist/
+node_modules
+
