@@ -13,20 +13,26 @@ import {
   seekTo,
   exportTrackNotes,
   downloadFile,
+  isAd,
 } from "@swp/core";
 import { React, ReactDOM } from "@swp/ui/src/react";
 import { NotePanel } from "@swp/ui";
 
-// ---------- styles ----------
 const CSS = `
 #swp-section { margin: 0 0 16px 0; padding: 16px; border-radius: 8px;
   background: var(--spice-card, rgba(255,255,255,0.05)); color: var(--spice-text, #fff);
   border: none; font-family: var(--font-family, sans-serif); }
 #swp-section .swp-panel { display: flex; flex-direction: column; gap: 16px; }
-#swp-section .swp-panel-header { display: flex; gap: 16px; margin-bottom: -4px; }
+#swp-section .swp-panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+#swp-section .swp-segmented-control { display: flex; background: rgba(255,255,255,0.1); border-radius: 32px; padding: 4px; gap: 4px; }
+#swp-section .swp-segment { background: transparent; border: none; color: rgba(255,255,255,0.6);
+  padding: 6px 16px; border-radius: 24px; cursor: pointer;
+  font-size: 13px; font-weight: 700; transition: all 0.2s ease; }
+#swp-section .swp-segment:hover { color: #fff; }
+#swp-section .swp-segment-active { background: rgba(255,255,255,0.15); color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
 #swp-section .swp-tab { background: none; border: none; color: rgba(255,255,255,0.6);
-  padding: 0 0 8px 0; cursor: pointer; border-bottom: 2px solid transparent; 
-  font-size: 16px; font-weight: 700; transition: color 0.2s ease; }
+  padding: 0 0 4px 0; cursor: pointer; border-bottom: 2px solid transparent; 
+  font-size: 14px; font-weight: 700; transition: color 0.2s ease; }
 #swp-section .swp-tab:hover { color: #fff; }
 #swp-section .swp-tab-active { color: #fff; border-bottom-color: var(--spice-button, #1db954); }
 #swp-section .swp-filter-row { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -90,7 +96,6 @@ style.id = "swp-styles";
 style.textContent = CSS;
 document.head.appendChild(style);
 
-// ---------- state ----------
 const state = {
   trackUri: null as string | null,
   notes: [] as Note[],
@@ -110,6 +115,13 @@ function refresh() {
 function render() {
   const host = document.getElementById("swp-section");
   if (!host) return;
+  if (isAd()) {
+    ReactDOM.unmountComponentAtNode(host);
+    host.style.display = "none";
+    return;
+  }
+  host.style.display = "";
+  
   const settings = loadSettings();
   const info = getTrackInfo() ?? { name: "Unknown", artist: "Unknown" };
   ReactDOM.render(
@@ -118,6 +130,11 @@ function render() {
       positionMs: getProgressMs(),
       notes: state.notes,
       defaultTag: settings.defaultTag,
+      appMode: settings.appMode,
+      onSaveSettings: (newSettings: any) => {
+        saveSettings({ ...settings, ...newSettings });
+        render();
+      },
       onSave: (note: Note) => {
         state.notes = [...state.notes, note];
         persist();
@@ -154,7 +171,6 @@ function render() {
   );
 }
 
-// ---------- mount into Now Playing View ----------
 function mount(): boolean {
   const host =
     document.querySelector(".main-nowPlayingView-panel") ||
@@ -173,13 +189,12 @@ function mount(): boolean {
     refresh();
     console.log("[swp] mounted into Now Playing View");
   } else if (el.parentElement !== host) {
-    host.appendChild(el); // Spotify React menghapus DOM asing pas re-render, pasang ulang
+    host.appendChild(el);
   }
   render();
   return true;
 }
 
-// ---------- main ----------
 async function main() {
   while (!(window as any).Spicetify?.Platform || !(window as any).Spicetify?.Player?.data) {
     await new Promise((r) => setTimeout(r, 300));
@@ -187,12 +202,10 @@ async function main() {
 
   const settings = loadSettings();
 
-  // Shortcut sekarang fokus ke kotak catatan, bukan toggle panel
   Spicetify.Mousetrap.bind(settings.shortcut, () => {
     (document.querySelector("#swp-section textarea") as HTMLTextAreaElement | null)?.focus();
   });
 
-  // Mount sekarang + awasi terus, Spotify suka ngehapus DOM asing waktu re-render
   mount();
   const observer = new MutationObserver(() => { mount(); });
   observer.observe(document.body, { childList: true, subtree: true });

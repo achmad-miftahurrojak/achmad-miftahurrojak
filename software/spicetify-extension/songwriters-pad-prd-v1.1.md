@@ -180,9 +180,9 @@ Saya ingin bisa mengubah mode ekstensi antara "Creator Mode" dan "Memory Mode",
 Agar UI dan opsi tag menyesuaikan dengan konteks kebutuhan saya saat itu.
 
 Acceptance Criteria:
-- Terdapat toggle/dropdown di header panel untuk memilih mode (Creator / Memory)
-- Pilihan mode tersimpan secara persisten per user (di local storage swp:settings)
-- Mengganti mode otomatis mengubah opsi tag yang tersedia saat membuat note baru
+- Terdapat segmented control (dua tombol bersebelahan) di header panel untuk memilih mode (Creator / Memory)
+- Pilihan mode tersimpan secara persisten per user (di local storage swp:settings) dan tetap sama saat Spotify direstart
+- Mengganti mode otomatis mengubah filter row dan tag order pada form input
 ```
 
 **US-009: Memory Tags**
@@ -193,9 +193,9 @@ Agar saya bisa menyimpan kenangan spesifik yang terhubung ke lagu tersebut.
 
 Acceptance Criteria:
 - Saat "Memory Mode" aktif, tag yang tersedia adalah: Person, Moment, Feeling, Place
-- Tag "Person" mendukung input nama spesifik (contoh: "Reza")
+- Tag "Person" memunculkan input tambahan "Who?" yang menampilkan text badge khusus (contoh: `@Reza`) di Note Card
 - Warna tag memory dibedakan secara visual dari tag creator
-- (Catatan: Filter cross-lagu "show all notes about Reza" akan masuk di v1.1)
+- Skema personName ditambahkan sebagai field optional agar notes lama tidak rusak (backward compatibility)
 ```
 
 **US-010: Memory Card Export (Viral Feature)**
@@ -205,10 +205,10 @@ Saya ingin meng-export catatan memori saya menjadi gambar estetik (mirip Spotify
 Agar saya bisa membagikannya ke media sosial (Instagram Story, dll).
 
 Acceptance Criteria:
-- Terdapat opsi "Export Card" pada setiap note
-- Men-generate gambar (PNG/JPEG) yang memuat: Cover Album, Judul Lagu & Artis, Timestamp, Teks Catatan, dan Tag memori
-- Desain layout dioptimasi untuk social media sharing
-- Eksekusi export berjalan secara lokal (canvas/html2canvas) dan men-trigger download
+- Tombol "Export Card" tersedia pada setiap note saat berada di "Memory Mode"
+- Men-generate gambar (PNG) berukuran 1080x1350 (rasio 4:5 untuk IG Story)
+- Desain memuat: Judul + Artis, Cover Album (dengan fallback gradient jika gagal load karena CORS), Quote Timestamp, Teks Note, Badge @Person (jika ada), Tanggal, dan tulisan "via Songwriter's Pad"
+- Eksekusi export berjalan secara lokal menggunakan DOM off-screen (`position: fixed`, `left: -9999px`) untuk bypass limitasi `html-to-image`
 ```
 
 ---
