@@ -1,0 +1,479 @@
+<title>Hamin Security Review</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600;700&display=swap">
+
+<style>
+  :root {
+    --bg: #f8f7f5;
+    --bg-card: #ffffff;
+    --bg-card-alt: #f2f1ee;
+    --text: #1a1917;
+    --text-muted: #6b6860;
+    --text-faint: #9e9a90;
+    --border: #e2dfd8;
+    --accent: #2d6a4f;
+    --accent-light: #d8f3dc;
+    --danger: #c0392b;
+    --danger-light: #fdecea;
+    --warn: #b8860b;
+    --warn-light: #fdf6e3;
+    --ok: #2d6a4f;
+    --ok-light: #d8f3dc;
+    --info: #2563eb;
+    --info-light: #dbeafe;
+    --shadow: 0 1px 3px rgba(26,25,23,0.06);
+    --mono: 'JetBrains Mono', 'Consolas', monospace;
+    --sans: 'Inter', -apple-system, system-ui, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #141311;
+      --bg-card: #1e1d1a;
+      --bg-card-alt: #252420;
+      --text: #e8e6e1;
+      --text-muted: #9e9a90;
+      --text-faint: #6b6860;
+      --border: #333028;
+      --accent: #52b788;
+      --accent-light: #1a3329;
+      --danger: #e74c3c;
+      --danger-light: #3a1a17;
+      --warn: #daa520;
+      --warn-light: #332d14;
+      --ok: #52b788;
+      --ok-light: #1a3329;
+      --info: #60a5fa;
+      --info-light: #1a2744;
+      --shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #141311;
+    --bg-card: #1e1d1a;
+    --bg-card-alt: #252420;
+    --text: #e8e6e1;
+    --text-muted: #9e9a90;
+    --text-faint: #6b6860;
+    --border: #333028;
+    --accent: #52b788;
+    --accent-light: #1a3329;
+    --danger: #e74c3c;
+    --danger-light: #3a1a17;
+    --warn: #daa520;
+    --warn-light: #332d14;
+    --ok: #52b788;
+    --ok-light: #1a3329;
+    --info: #60a5fa;
+    --info-light: #1a2744;
+    --shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    padding: 2rem 1rem;
+    max-width: 780px;
+    margin: 0 auto;
+  }
+
+  header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  header h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.25rem;
+  }
+
+  header .subtitle {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+  }
+
+  .score-bar {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .score-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pill-ok { background: var(--ok-light); color: var(--ok); }
+  .pill-warn { background: var(--warn-light); color: var(--warn); }
+  .pill-danger { background: var(--danger-light); color: var(--danger); }
+  .pill-info { background: var(--info-light); color: var(--info); }
+
+  .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+  .dot-ok { background: var(--ok); }
+  .dot-warn { background: var(--warn); }
+  .dot-danger { background: var(--danger); }
+
+  section {
+    margin-bottom: 2rem;
+  }
+
+  section h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .finding {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.15rem;
+    margin-bottom: 0.65rem;
+    box-shadow: var(--shadow);
+  }
+
+  .finding-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .severity {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .sev-high { background: var(--danger-light); color: var(--danger); }
+  .sev-med { background: var(--warn-light); color: var(--warn); }
+  .sev-low { background: var(--info-light); color: var(--info); }
+
+  .finding-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .finding-body {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+
+  .finding-body code {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    background: var(--bg-card-alt);
+    padding: 0.1rem 0.35rem;
+    border-radius: 3px;
+    color: var(--text);
+  }
+
+  .finding-file {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--text-faint);
+    margin-top: 0.4rem;
+  }
+
+  .checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    padding: 0.45rem 0.65rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+
+  .check-icon {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    margin-top: 0.1rem;
+  }
+
+  .check-ok { color: var(--ok); }
+  .check-warn { color: var(--warn); }
+  .check-fail { color: var(--danger); }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.65rem;
+    margin-bottom: 2rem;
+  }
+
+  .summary-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: var(--shadow);
+  }
+
+  .summary-card .label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-faint);
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .summary-card .value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .summary-card .detail {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.15rem;
+  }
+
+  .section-note {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    background: var(--bg-card-alt);
+    padding: 0.65rem 0.85rem;
+    border-radius: 6px;
+    margin-top: 0.5rem;
+    border-left: 3px solid var(--accent);
+  }
+
+  footer {
+    margin-top: 2.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.75rem;
+    color: var(--text-faint);
+  }
+
+  @media (max-width: 500px) {
+    body { padding: 1.25rem 0.75rem; }
+    .summary-grid { grid-template-columns: 1fr 1fr; }
+    header h1 { font-size: 1.25rem; }
+  }
+</style>
+
+<header>
+  <h1>🔒 Security Review — Hamin Bot Discord</h1>
+  <div class="subtitle">Monorepo 6 bot · pnpm workspace · Prisma ORM · Gemini/Groq/Cerebras AI · 27 Agustus 2026</div>
+
+  <div class="score-bar">
+    <span class="score-pill pill-ok"><span class="dot dot-ok"></span> 8 Aman</span>
+    <span class="score-pill pill-warn"><span class="dot dot-warn"></span> 3 Perlu perhatian</span>
+    <span class="score-pill pill-danger"><span class="dot dot-danger"></span> 2 Perlu diperbaiki</span>
+  </div>
+</header>
+
+<div class="summary-grid">
+  <div class="summary-card">
+    <div class="label">Dependency Audit</div>
+    <div class="value" style="color: var(--ok);">0</div>
+    <div class="detail">Tidak ada vulnerability</div>
+  </div>
+  <div class="summary-card">
+    <div class="label">Secret di Git</div>
+    <div class="value" style="color: var(--ok);">0</div>
+    <div class="detail">Bersih, tidak ada bocor</div>
+  </div>
+  <div class="summary-card">
+    <div class="label">SQL Injection</div>
+    <div class="value" style="color: var(--ok);">0</div>
+    <div class="detail">Semua pakai Prisma ORM</div>
+  </div>
+  <div class="summary-card">
+    <div class="label">Temuan</div>
+    <div class="value">5</div>
+    <div class="detail">2 penting · 3 minor</div>
+  </div>
+</div>
+
+<!-- FINDINGS -->
+
+<section>
+  <h2>🔴 Perlu Diperbaiki</h2>
+
+  <div class="finding">
+    <div class="finding-header">
+      <span class="severity sev-high">High</span>
+      <span class="finding-title">API key Gemini bocor di URL query string</span>
+    </div>
+    <div class="finding-body">
+      Gemini API key dikirim sebagai <code>?key=...</code> di URL. URL bisa ter-log di proxy, CDN log, atau error monitoring. Sebaiknya pakai header <code>x-goog-api-key</code> atau SDK resmi supaya key tidak muncul di URL/log.
+    </div>
+    <div class="finding-file">apps/dirga/src/modules/ai.ts:69</div>
+  </div>
+
+  <div class="finding">
+    <div class="finding-header">
+      <span class="severity sev-high">High</span>
+      <span class="finding-title">Profil user (Dirga) — data personal tanpa retention/delete</span>
+    </div>
+    <div class="finding-body">
+      Bot Dirga menyimpan catatan profil user (hobi, kesukaan, dll) di <code>DirgaProfile</code> secara permanen, tanpa mekanisme hapus atau expiry. User tidak bisa request delete data mereka. Meski prompt sudah bilang "jangan catat hal sensitif", LLM bisa tetap menyimpan info yang seharusnya tidak di-persist. Tambahkan command <code>/lupain</code> untuk hapus profil, dan TTL auto-expire.
+    </div>
+    <div class="finding-file">apps/dirga/src/index.ts:103–140</div>
+  </div>
+</section>
+
+<section>
+  <h2>🟡 Perlu Perhatian</h2>
+
+  <div class="finding">
+    <div class="finding-header">
+      <span class="severity sev-med">Medium</span>
+      <span class="finding-title">Output LLM langsung dikirim ke Discord tanpa sanitasi</span>
+    </div>
+    <div class="finding-body">
+      Jawaban dari Gemini/Groq/Cerebras langsung dikirim via <code>message.reply()</code>. Discord embed markdown memang terbatas, tapi output LLM bisa mengandung mention <code>@everyone</code>, link phishing, atau prompt injection. Sanitasi minimal: strip <code>@everyone</code>, <code>@here</code>, dan URL yang mencurigakan dari output model sebelum dikirim.
+    </div>
+    <div class="finding-file">apps/dirga/src/index.ts:239</div>
+  </div>
+
+  <div class="finding">
+    <div class="finding-header">
+      <span class="severity sev-med">Medium</span>
+      <span class="finding-title">User message content masuk ke LLM context tanpa sanitasi</span>
+    </div>
+    <div class="finding-body">
+      Pesan user langsung masuk ke prompt AI termasuk <code>displayName</code>. User bisa craft nama/pesan yang berisi prompt injection untuk memanipulasi behavior AI. Pertimbangkan: truncate input, strip karakter kontrol, dan jangan masukkan <code>displayName</code> sebagai bagian dari system-level instruction.
+    </div>
+    <div class="finding-file">apps/dirga/src/index.ts:158, 113</div>
+  </div>
+
+  <div class="finding">
+    <div class="finding-header">
+      <span class="severity sev-med">Medium</span>
+      <span class="finding-title">packageManager version tidak di-pin ketat</span>
+    </div>
+    <div class="finding-body">
+      <code>package.json</code> mendeklarasi <code>"pnpm@9.0.0"</code> tapi tidak ada <code>corepack enable</code> enforcement. Lockfile <code>pnpm-lock.yaml</code> ada (bagus), tapi pastikan CI pakai <code>pnpm install --frozen-lockfile</code> supaya reproducible.
+    </div>
+    <div class="finding-file">package.json:16</div>
+  </div>
+</section>
+
+<section>
+  <h2>✅ Yang Sudah Baik</h2>
+
+  <div class="checklist">
+    <div class="check-item">
+      <span class="check-icon check-ok">✓</span>
+      <span><strong>Secret management</strong> — Semua token/key dari <code>process.env</code>, <code>.gitignore</code> cover <code>.env*</code>, tidak ada secret di git history</span>
+    </div>
+    <div class="check-item">
+      <span class="check-icon check-ok">✓</span>
+      <span><strong>Database queries</strong> — Semua pakai Prisma ORM, tidak ada raw SQL, zero injection risk</span>
+    </div>
+    <div class="check-item">
+      <span class="check-icon check-ok">✓</span>
+      <span><strong>No eval/innerHTML</strong> — Tidak ada penggunaan <code>eval()</code>, <code>innerHTML</code>, atau <code>child_process.exec()</code></span>
+    </div>
+    <div class="check-item">
+      <span class="check-icon check-ok">✓</span>
+      <span><strong>Dependency audit bersih</strong> — <code>pnpm audit</code>: 0 vulnerability dari 191 dependencies</span>
+    </div>
+    <div class="check-item">
+      <span class="check-icon check-ok">✓</span>
+      <span><strong>Rate limiting</strong> — Bot Dirga punya rate limit per-user (20/jam, 5 detik cooldown)</span>
+    </div>
+    <div class="check-item">
+      <span class="check-icon check-ok">✓</span>
+      <span><strong>Bot message filtering</strong> — Semua handler cek <code>message.author.bot</code> untuk hindari loop</span>
+    </div>
+    <div class="check-item">
+      <span class="check-icon check-ok">✓</span>
+      <span><strong>Error handling</strong> — Error di-catch dan di-log, tidak expose stack trace ke user Discord</span>
+    </div>
+    <div class="check-item">
+      <span class="check-icon check-ok">✓</span>
+      <span><strong>Lockfile committed</strong> — <code>pnpm-lock.yaml</code> ada di repo</span>
+    </div>
+    <div class="check-item">
+      <span class="check-icon check-ok">✓</span>
+      <span><strong>Input via slash commands</strong> — Mayoritas input user lewat Discord slash command (typed & bounded), bukan free-text parsing</span>
+    </div>
+    <div class="check-item">
+      <span class="check-icon check-ok">✓</span>
+      <span><strong>Image upload bounded</strong> — Dirga limit upload gambar: max 3 gambar, max 4MB per file, MIME type check</span>
+    </div>
+    <div class="check-item">
+      <span class="check-icon check-ok">✓</span>
+      <span><strong>External fetch timeout</strong> — WaveFlix pakai <code>AbortSignal.timeout()</code> untuk semua fetch ke TMDB/idlix</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>📋 Rekomendasi Prioritas</h2>
+
+  <div class="finding" style="border-left: 3px solid var(--danger); border-color: var(--border); border-left-color: var(--danger);">
+    <div class="finding-title" style="font-size: 0.875rem;">1. Pindahkan Gemini API key ke header</div>
+    <div class="finding-body" style="margin-top: 0.3rem;">
+      Ganti <code>?key=${GEMINI_API_KEY}</code> → header <code>x-goog-api-key: ${GEMINI_API_KEY}</code>. Cuma perlu ubah 3 baris di <code>ai.ts</code>.
+    </div>
+  </div>
+
+  <div class="finding" style="border-left: 3px solid var(--danger); border-color: var(--border); border-left-color: var(--danger);">
+    <div class="finding-title" style="font-size: 0.875rem;">2. Tambahkan /lupain command & TTL profil</div>
+    <div class="finding-body" style="margin-top: 0.3rem;">
+      Slash command untuk user hapus profil mereka sendiri. Bonus: auto-expire profil setelah 90 hari tanpa interaksi.
+    </div>
+  </div>
+
+  <div class="finding" style="border-left: 3px solid var(--warn); border-color: var(--border); border-left-color: var(--warn);">
+    <div class="finding-title" style="font-size: 0.875rem;">3. Sanitasi output LLM sebelum kirim ke Discord</div>
+    <div class="finding-body" style="margin-top: 0.3rem;">
+      Strip <code>@everyone</code>, <code>@here</code>, dan role mention dari output AI. Satu utility function, pakai di semua bot yang punya AI.
+    </div>
+  </div>
+</section>
+
+<div class="section-note">
+  <strong>Kesimpulan:</strong> Bot secara umum sudah cukup aman untuk private Discord server. Fondasi bagus — secret management, ORM, rate limiting sudah ada. Dua hal yang perlu segera diperbaiki: Gemini key di URL dan data retention profil Dirga. Sisanya nice-to-have hardening.
+</div>
+
+<footer>
+  Scan dilakukan oleh Claude · 27 Agustus 2026 · Cakupan: 6 bot apps, shared packages, monorepo config
+</footer>
