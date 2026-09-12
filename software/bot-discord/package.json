@@ -10,8 +10,8 @@
                     "db:migrate":  "turbo run db:migrate"
                 },
     "devDependencies":  {
-                            "turbo":  "latest",
-                            "typescript":  "^5.0.0"
+                            "typescript":  "^5.0.0",
+                            "turbo":  "latest"
                         },
     "packageManager":  "pnpm@9.0.0"
 }
