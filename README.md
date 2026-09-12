@@ -1,6 +1,6 @@
 <div align="center">
 
-# Hamin · 백하민
+# Achmad Miftahurrojak
 
 Indonesian developer focused on embedded systems and IoT engineering.
 
