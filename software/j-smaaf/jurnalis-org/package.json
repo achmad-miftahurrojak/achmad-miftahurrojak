@@ -13,9 +13,13 @@
     "build:api": "npm run build -w @jurnalis-org/api",
     "typecheck": "npm run typecheck -w @jurnalis-org/api && npm run typecheck -w @jurnalis-org/web",
     "lint": "npm run lint -w @jurnalis-org/web",
-    "build": "npm run build:web"
+    "build": "turbo run build",
+    "dev": "turbo run dev"
   },
   "engines": {
     "node": ">=20"
+  },
+  "devDependencies": {
+    "turbo": "latest"
   }
 }
