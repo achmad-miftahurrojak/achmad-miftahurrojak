@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.turbo/
+*.tsbuildinfo
+
+# Environment & secrets
+.env
+.env.*
+
+# Python era (legacy)
+__pycache__/
+*.pyc
+
+# Runtime locks & local data
+.arka.lock
+data/cookies.txt
+data/id-channel-discord.txt
+data/*.rusak-*
+
+# AI tooling (lokal saja)
+.agents/
+skills-lock.json
+
+*.log
