@@ -2,7 +2,7 @@
 
 # Achmad Miftahurrojak
 
-Indonesian developer focused on embedded systems and IoT engineering.
+Embedded Systems & IoT Engineer
 
 </div>
 
@@ -10,34 +10,34 @@ Indonesian developer focused on embedded systems and IoT engineering.
 
 ## About
 
-I build embedded systems designed for real-world impact. My projects include water quality monitors for off-grid villages, early-warning tools for electrical failures, and automated systems for community management. Beyond C++ and JavaScript, I also explore algorithmic music composition.
+I build embedded systems designed for real world impact. My primary focus involves developing monitoring and early warning systems for communities lacking robust infrastructure. I specialize in C++ for microcontrollers and integrate these systems with modern backend architectures.
 
 ---
 
-## Projects
+## Featured Projects
+
+**[forest-fire-early-warning](https://github.com/hamin-baek/forest-fire-early-warning)**  
+A LoRa based wireless sensor network designed for early forest fire detection in remote areas. Features ultra low power nodes and a central alert hub with SMS integration.  
+`C++` `ESP32` `LoRa` `Wireless Sensor Network`
 
 **[water-quality-monitor](https://github.com/hamin-baek/water-quality-monitor)**  
-Solar-powered IoT system for real-time water quality monitoring in remote
-off-grid villages. Reads TDS, turbidity, and pH via MQTT over TLS.  
-`C++` `ESP32` `MQTT/TLS` `IoT`
+Real time water quality monitoring system measuring TDS, pH, and Turbidity. Designed for community water access points to ensure safe consumption.  
+`C++` `ESP32` `Hardware`
 
 **[power-outage-predictor](https://github.com/hamin-baek/power-outage-predictor)**  
-ESP32-based electrical monitoring system with early-warning detection and
-remote push notifications.  
-`C++` `ESP32` `Embedded Systems`
+Predictive power grid failure detection system that monitors AC voltage patterns to detect severe brownouts before they occur, featuring GSM SMS alerts.  
+`C++` `ESP32` `GSM`
 
 ---
 
-## Stack
+## Tech Stack
 
-`C++` `JavaScript` `Python` `Node.js`
+`C++` `C` `Python` `JavaScript` `Node.js` `PlatformIO` `ESP32` `Arduino`
 
 ---
 
 <div align="center">
 
-[Instagram](https://instagram.com/hamiiin.n) · [Email](mailto:rozakahmadmiftah@gmail.com)
-
-*Also into photography, illustration, and writing.*
+[Instagram](https://instagram.com/hamiiin.n) | [Email](mailto:rozakahmadmiftah@gmail.com)
 
 </div>
