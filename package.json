@@ -1,0 +1,15 @@
+{
+  "name": "hamin-monorepo",
+  "private": true,
+  "workspaces": [
+    "hardware/*",
+    "software/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev"
+  },
+  "devDependencies": {
+    "turbo": "latest"
+  }
+}
