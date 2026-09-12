@@ -1,5 +1,5 @@
 {
-    "name":  "@hamin/bot-discord",
+    "name":  "bot-discord",
     "private":  true,
     "scripts":  {
                     "build":  "turbo run build",
