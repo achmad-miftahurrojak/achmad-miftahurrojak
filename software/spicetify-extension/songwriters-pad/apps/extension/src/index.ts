@@ -19,8 +19,8 @@ import { NotePanel } from "@swp/ui";
 
 // ---------- styles ----------
 const CSS = `
-#swp-section {
-  color: var(--spice-text, #fff);
+#swp-section { margin: 0 0 16px 0; padding: 16px; border-radius: 8px;
+  background: var(--spice-card, rgba(255,255,255,0.05)); color: var(--spice-text, #fff);
   border: none; font-family: var(--font-family, sans-serif); }
 #swp-section .swp-panel { display: flex; flex-direction: column; gap: 16px; }
 #swp-section .swp-panel-header { display: flex; gap: 16px; margin-bottom: -4px; }
@@ -159,14 +159,16 @@ function mount(): boolean {
   const host =
     document.querySelector(".main-nowPlayingView-panel") ||
     document.querySelector(".main-nowPlayingView-nowPlayingWidget") ||
-    document.querySelector(".main-nowPlayingView-container") ||
-    document.querySelector(".main-rightSidebar-rightSidebar");
-  if (!host) return false;
+    document.querySelector(".main-nowPlayingView-container");
+  if (!host) {
+    const el = document.getElementById("swp-section");
+    if (el) el.remove();
+    return false;
+  }
   let el = document.getElementById("swp-section");
   if (!el) {
     el = document.createElement("div");
     el.id = "swp-section";
-    el.className = "main-nowPlayingView-section"; // Inject class bawaan Spotify
     host.appendChild(el);
     refresh();
     console.log("[swp] mounted into Now Playing View");
