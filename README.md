@@ -2,42 +2,34 @@
 
 # Achmad Miftahurrojak
 
-IoT Engineer
+Embedded Systems & IoT Engineer
+
+Building field-ready monitoring and early-warning systems with microcontrollers, sensors, and reliable communication links.
+
+[Projects](#selected-projects) · [Hardware stack](#hardware-stack) · [GitHub](https://github.com/achmad-miftahurrojak) · [Contact](#contact)
 
 </div>
 
 ---
 
-## About
+## What I build
 
-I build embedded systems designed for real world impact. My primary focus involves developing monitoring and early warning systems for communities lacking robust infrastructure. I specialize in C++ for microcontrollers and integrate these systems with modern backend architectures.
+I work on small embedded systems that measure real conditions, make a local decision, and deliver an alert when it matters. My current portfolio covers water quality, electrical outages, forest-fire risk, and small developer tools.
 
----
+## Selected projects
 
-## Featured Projects
+| Project | What it does | Core stack |
+| --- | --- | --- |
+| [Water Quality Monitor](https://github.com/achmad-miftahurrojak/water-quality-monitor) | Samples TDS, pH, and turbidity, then logs and displays readings. | ESP32 · C++ · PlatformIO |
+| [Power Outage Predictor](https://github.com/achmad-miftahurrojak/power-outage-predictor) | Classifies AC voltage states and sends an SMS when an outage is detected. | ESP32 · C++ · ZMPT101B · GSM |
+| [Forest Fire Early Warning](https://github.com/achmad-miftahurrojak/forest-fire-early-warning) | Sends environmental readings from LoRa nodes to an alert hub. | ESP32 · C++ · LoRa · SIM800L |
 
-**[forest-fire-early-warning](https://github.com/achmad-miftahurrojak/forest-fire-early-warning)**  
-A LoRa based wireless sensor network designed for early forest fire detection in remote areas. Features ultra low power nodes and a central alert hub with SMS integration.  
-`C++` `ESP32` `LoRa` `Wireless Sensor Network`
+Each hardware repository includes an architecture note, firmware layout, build commands, and configuration boundaries for local secrets.
 
-**[water-quality-monitor](https://github.com/achmad-miftahurrojak/water-quality-monitor)**  
-Real time water quality monitoring system measuring TDS, pH, and Turbidity. Designed for community water access points to ensure safe consumption.  
-`C++` `ESP32` `Hardware`
+## Hardware stack
 
-**[power-outage-predictor](https://github.com/achmad-miftahurrojak/power-outage-predictor)**  
-Predictive power grid failure detection system that monitors AC voltage patterns to detect severe brownouts before they occur, featuring GSM SMS alerts.  
-`C++` `ESP32` `GSM`
+`C++` `C` `ESP32` `Arduino` `PlatformIO` `LoRa` `GSM` `MQTT` `SD card` `RTC`
 
----
+## Contact
 
-## Tech Stack
-
-`C++` `C` `Python` `JavaScript` `Node.js` `PlatformIO` `ESP32` `Arduino`
-
----
-
-<div align="center">
-
-[Instagram](https://instagram.com/hamiiin.n) | [Email](mailto:rozakahmadmiftah@gmail.com)
-
-</div>
+[GitHub](https://github.com/achmad-miftahurrojak) · [Instagram](https://instagram.com/hamiiin.n) · [Email](mailto:rozakahmadmiftahur@gmail.com)
