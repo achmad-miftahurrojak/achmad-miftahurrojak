@@ -2,7 +2,7 @@
 
 # Achmad Miftahurrojak
 
-Embedded Systems & IoT Engineer
+IoT Engineer
 
 </div>
 
