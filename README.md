@@ -2,7 +2,7 @@
 
 # Achmad Miftahurrojak
 
-<a href="README.md"><img alt="English" src="https://img.shields.io/badge/English-DFE0E5"></a> <a href="README.id.md"><img alt="Bahasa Indonesia" src="https://img.shields.io/badge/Bahasa%20Indonesia-DFE0E5"></a> <a href="README.ko.md"><img alt="한국어" src="https://img.shields.io/badge/%ED%95%9C%EA%B5%AD%EC%96%B4-DFE0E5"></a>
+<a href="README.md"><img alt="English" src="https://img.shields.io/badge/English-DFE0E5"></a> <a href="docs/README_ID.md"><img alt="Bahasa Indonesia" src="https://img.shields.io/badge/Bahasa%20Indonesia-DFE0E5"></a> <a href="docs/README_KR.md"><img alt="한국어" src="https://img.shields.io/badge/%ED%95%9C%EA%B5%AD%EC%96%B4-DFE0E5"></a>
 
 <a href="https://github.com/achmad-miftahurrojak"><img alt="GitHub" src="https://img.shields.io/badge/GitHub-achmad--miftahurrojak-181717?logo=github"></a> <img alt="Focus" src="https://img.shields.io/badge/Focus-Embedded%20Systems-0A7EA4">
 
