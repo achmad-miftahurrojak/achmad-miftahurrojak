@@ -37,3 +37,5 @@ Each hardware repository includes an architecture note, firmware layout, build c
 ## Contact
 
 [GitHub](https://github.com/achmad-miftahurrojak) · [Instagram](https://instagram.com/hamiiin.n) · [Email](mailto:rozakahmadmiftahur@gmail.com)
+
+I enjoy gaming, cinematography, and reading novels in my free time.
