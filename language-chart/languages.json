@@ -1,0 +1,51 @@
+{
+  "username": "achmad-miftahurrojak",
+  "updated_at": "2026-09-30T09:17:01.423051+00:00",
+  "languages": [
+    {
+      "name": "TypeScript",
+      "share": 50.54,
+      "color": "#38bdf8"
+    },
+    {
+      "name": "C++",
+      "share": 18.71,
+      "color": "#2dd4bf"
+    },
+    {
+      "name": "JavaScript",
+      "share": 15.68,
+      "color": "#fbbf24"
+    },
+    {
+      "name": "CSS",
+      "share": 6.04,
+      "color": "#c084fc"
+    },
+    {
+      "name": "C",
+      "share": 3.72,
+      "color": "#fb7185"
+    },
+    {
+      "name": "Python",
+      "share": 3.63,
+      "color": "#a3e635"
+    },
+    {
+      "name": "HTML",
+      "share": 1.2,
+      "color": "#818cf8"
+    },
+    {
+      "name": "Batchfile",
+      "share": 0.25,
+      "color": "#fb923c"
+    },
+    {
+      "name": "Other",
+      "share": 0.23,
+      "color": "#67e8f9"
+    }
+  ]
+}
