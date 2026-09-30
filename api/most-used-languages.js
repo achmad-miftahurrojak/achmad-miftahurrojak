@@ -1,5 +1,6 @@
 const USERNAME = "achmad-miftahurrojak";
-const colorFor = (index) => `hsl(${Math.round((index * 137.508) % 360)} 78% 60%)`;
+const COLORS = ["#38bdf8", "#2dd4bf", "#a78bfa", "#facc15", "#fb7185", "#a3e635", "#818cf8", "#fb923c"];
+const colorFor = index => COLORS[index % COLORS.length];
 
 async function githubJson(url, token) {
   const result = await fetch(url, { headers: {
@@ -32,13 +33,11 @@ async function collectLanguages(token) {
 const xml = value => String(value).replace(/[&<>"']/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;", "'":"&apos;"})[char]);
 
 function render(languages) {
-  const width = 1000;
-  const height = 500;
-  const rowHeight = 35;
-  const rowTop = 165;
+  const width = 1200;
+  const height = 380;
   const total = languages.reduce((sum, row) => sum + row.bytes, 0);
   const rows = languages.slice(0, 8).map(row => ({ ...row, share: total ? row.bytes / total * 100 : 0 }));
-  const cx = 270, cy = 300, radius = 136;
+  const cx = 270, cy = 224, radius = 112;
   const angleAt = index => -Math.PI / 2 + (Math.PI * 2 * index) / Math.max(rows.length, 1);
   const pointAt = (index, distance) => ({
     x: cx + Math.cos(angleAt(index)) * distance,
@@ -64,13 +63,16 @@ function render(languages) {
     return `<circle cx="${point.x.toFixed(2)}" cy="${point.y.toFixed(2)}" r="5" fill="${row.color}" stroke="#101829" stroke-width="2"/>`;
   }).join("");
   const legend = rows.map((row, index) => {
-    const y = rowTop + index * rowHeight;
-    const bar = 359 * row.share / max;
+    const column = Math.floor(index / 4);
+    const line = index % 4;
+    const x = 535 + column * 320;
+    const y = 111 + line * 59;
+    const bar = 276 * row.share / max;
     const percent = row.share > 0 && row.share < 0.05 ? "<0.1%" : `${row.share.toFixed(1)}%`;
-    return `<g><circle cx="585" cy="${y}" r="5.5" fill="${row.color}"/><text x="603" y="${y + 5}" fill="#edf4ff" font-family="Arial,sans-serif" font-size="14" font-weight="700">${xml(row.name)}</text><text x="962" y="${y + 5}" text-anchor="end" fill="#b4c2d6" font-family="Arial,sans-serif" font-size="13">${xml(percent)}</text><rect x="603" y="${y + 13}" width="359" height="4" rx="2" fill="#29364a"/><rect x="603" y="${y + 13}" width="${bar.toFixed(2)}" height="4" rx="2" fill="${row.color}"/></g>`;
+    return `<g><rect x="${x}" y="${y}" width="300" height="49" rx="12" fill="#141f32" stroke="#26364a"/><circle cx="${x + 17}" cy="${y + 17}" r="5" fill="${row.color}"/><text x="${x + 31}" y="${y + 21}" fill="#edf4ff" font-family="Arial,sans-serif" font-size="13" font-weight="700">${xml(row.name)}</text><text x="${x + 283}" y="${y + 21}" text-anchor="end" fill="#d6e2f2" font-family="Arial,sans-serif" font-size="13" font-weight="700">${xml(percent)}</text><rect x="${x + 14}" y="${y + 34}" width="276" height="4" rx="2" fill="#29364a"/><rect x="${x + 14}" y="${y + 34}" width="${bar.toFixed(2)}" height="4" rx="2" fill="${row.color}"/></g>`;
   }).join("");
   const empty = rows.length ? "" : `<text x="${cx}" y="${cy + 5}" text-anchor="middle" fill="#b4c2d6" font-family="Arial,sans-serif" font-size="13">NO LANGUAGE DATA</text>`;
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><title>Top eight languages across all repositories</title><desc>Radar chart of language byte shares with exact percentages in the legend.</desc><rect width="${width}" height="${height}" rx="24" fill="#101829"/><rect x="1" y="1" width="${width - 2}" height="${height - 2}" rx="23" fill="none" stroke="#26364a"/><text x="36" y="42" fill="#37dabe" font-family="Arial,sans-serif" font-size="15" font-weight="700" letter-spacing="1.4">MOST USED LANGUAGES</text><text x="36" y="67" fill="#b4c2d6" font-family="Arial,sans-serif" font-size="12">ALL REPOSITORIES · TOP 8</text><path d="M36 86H964" stroke="#26364a"/>${grid}${spokes}${area}${points}${empty}${legend}</svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><title>Top eight languages across all repositories</title><desc>Radar chart of language byte shares with exact percentages in the legend.</desc><defs><linearGradient id="radar-fill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#38bdf8" stop-opacity=".38"/><stop offset="1" stop-color="#a78bfa" stop-opacity=".12"/></linearGradient><radialGradient id="chart-glow"><stop offset="0" stop-color="#1d3551"/><stop offset="1" stop-color="#101829"/></radialGradient></defs><rect width="${width}" height="${height}" rx="24" fill="url(#chart-glow)"/><rect x="1" y="1" width="${width - 2}" height="${height - 2}" rx="23" fill="none" stroke="#26364a"/><text x="32" y="38" fill="#37dabe" font-family="Arial,sans-serif" font-size="14" font-weight="700" letter-spacing="1.5">MOST USED LANGUAGES</text><text x="32" y="59" fill="#b4c2d6" font-family="Arial,sans-serif" font-size="11">ALL REPOSITORIES</text><rect x="1091" y="23" width="76" height="26" rx="13" fill="#123843"/><circle cx="1107" cy="36" r="3.5" fill="#2dd4bf"/><text x="1117" y="40" fill="#8df5df" font-family="Arial,sans-serif" font-size="10" font-weight="700" letter-spacing=".8">TOP 8</text><path d="M32 75H1168" stroke="#26364a"/>${grid}${spokes}${area.replace('fill="#38bdf8"', 'fill="url(#radar-fill)"')}${points}${empty}${legend}<text x="32" y="354" fill="#8395ad" font-family="Arial,sans-serif" font-size="10" letter-spacing=".7">LANGUAGE BYTE SHARE</text></svg>`;
 }
 export default async function handler(_request, response) {
   const token = process.env.GH_STATS_TOKEN;
