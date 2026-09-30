@@ -149,7 +149,7 @@ def draw_chart(languages: list[tuple[str, int]], progress: float, frame: int) ->
 
     draw.text((54, 394), "BY LANGUAGE BYTES  ·  PUBLIC + PRIVATE REPOS", font=font(11, True), fill=MUTED)
     draw.text((946, 394), "UPDATED AUTOMATICALLY", font=font(11, True), fill=ACCENT, anchor="ra")
-    # A small travelling accent gives the loop a subtle motion beyond the chart sweep.
+    # A small accent moves during the finite chart animation.
     pulse_x = 54 + (frame % 24) * 3
     draw.ellipse((pulse_x, 423, pulse_x + 4, 427), fill=ACCENT)
     return image
@@ -162,8 +162,9 @@ def main() -> None:
     frame_count = 24
     frames = [draw_chart(languages, min(1.0, (index + 1) / 17), index)
               for index in range(frame_count)]
+    frames[0].info.pop("loop", None)
     frames[0].save(OUTPUT, save_all=True, append_images=frames[1:], duration=85,
-                   loop=0, optimize=True, disposal=2)
+                   optimize=True, disposal=2)
     print(f"Wrote {OUTPUT} with {len(languages)} languages from repositories accessible to the token.")
 
 

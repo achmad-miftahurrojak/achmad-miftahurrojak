@@ -34,7 +34,7 @@ Each hardware repository includes an architecture note, firmware layout, build c
 
 <!-- Generated weekly by .github/workflows/update-language-chart.yml. -->
 
-![Animated chart of languages used across my GitHub repositories](assets/most-used-languages.gif)
+<img src="assets/most-used-languages.gif" alt="Most used languages across my GitHub repositories" loading="lazy">
 
 Language shares are calculated from GitHub's per-repository language byte counts across all repositories the workflow token can access, including private repositories. Only language names and their relative shares appear in this chart. To include private repositories, add a `GH_STATS_TOKEN` Actions secret with read access to their repository metadata and contents, then run **Update language chart** from the Actions tab.
 
