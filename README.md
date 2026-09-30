@@ -32,11 +32,11 @@ Each hardware repository includes an architecture note, firmware layout, build c
 
 ## Most used languages
 
-<!-- Generated weekly by .github/workflows/update-language-chart.yml. -->
+<a href="https://achmad-miftahurrojak.github.io/achmad-miftahurrojak/"><img src="assets/most-used-languages.svg" alt="Most used languages across my GitHub repositories. Open the interactive chart." width="100%"></a>
 
-<img src="assets/most-used-languages.gif" alt="Most used languages across my GitHub repositories" loading="lazy">
+[Open the interactive chart ↗](https://achmad-miftahurrojak.github.io/achmad-miftahurrojak/)
 
-Language shares are calculated from GitHub's per-repository language byte counts across all repositories the workflow token can access, including private repositories. Only language names and their relative shares appear in this chart. To include private repositories, add a `GH_STATS_TOKEN` Actions secret with read access to their repository metadata and contents, then run **Update language chart** from the Actions tab.
+The preview links to an interactive chart. Its donut animates while in view, pauses off-screen, and highlights each language on hover. The weekly workflow includes private repositories when the `GH_STATS_TOKEN` Actions secret has read access to them; otherwise the chart uses only public repositories.
 
 ## Contact
 
