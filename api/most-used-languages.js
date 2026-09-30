@@ -1,5 +1,5 @@
 const USERNAME = "achmad-miftahurrojak";
-const COLORS = ["#38bdf8", "#2dd4bf", "#fbbf24", "#c084fc", "#fb7185", "#a3e635", "#818cf8", "#fb923c", "#67e8f9", "#f472b6"];
+const colorFor = (index) => `hsl(${Math.round((index * 137.508) % 360)} 78% 60%)`;
 
 async function githubJson(url, token) {
   const result = await fetch(url, { headers: {
@@ -26,33 +26,37 @@ async function collectLanguages(token) {
     if (repos.length < 100) break;
   }
   return [...totals.entries()].sort(([a, x], [b, y]) => y - x || a.localeCompare(b))
-    .map(([name, bytes], index) => ({ name, bytes, color: COLORS[index % COLORS.length] }));
+    .map(([name, bytes], index) => ({ name, bytes, color: colorFor(index) }));
 }
 
 const xml = value => String(value).replace(/[&<>"']/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;", "'":"&apos;"})[char]);
 
 function render(languages) {
-  const width = 900, rowHeight = 24, rowTop = 84;
-  const height = Math.max(220, rowTop + rowHeight * languages.length + 32);
+  const width = 1000;
+  const rowHeight = 28;
+  const rowTop = 112;
+  const height = Math.max(250, rowTop + rowHeight * languages.length + 28);
   const total = languages.reduce((sum, row) => sum + row.bytes, 0);
   const rows = languages.map(row => ({ ...row, share: total ? row.bytes / total * 100 : 0 }));
-  const cx = 180, cy = height / 2, radius = 72, circumference = 2 * Math.PI * radius;
+  const cx = 210, cy = height / 2 + 4, radius = 88, circumference = 2 * Math.PI * radius;
   let offset = 0;
   const slices = rows.map(row => {
     const arc = circumference * row.share / 100;
-    const svg = `<circle cx="${cx}" cy="${cy}" r="${radius}" fill="none" stroke="${row.color}" stroke-width="25" stroke-dasharray="${arc.toFixed(2)} ${circumference.toFixed(2)}" stroke-dashoffset="${(-circumference * offset / 100).toFixed(2)}" transform="rotate(-90 ${cx} ${cy})"/>`;
+    const svg = `<circle cx="${cx}" cy="${cy}" r="${radius}" fill="none" stroke="${row.color}" stroke-width="27" stroke-dasharray="${arc.toFixed(2)} ${circumference.toFixed(2)}" stroke-dashoffset="${(-circumference * offset / 100).toFixed(2)}" transform="rotate(-90 ${cx} ${cy})"/>`;
     offset += row.share;
     return svg;
   }).join("");
   const max = Math.max(...rows.map(row => row.share), 1);
   const legend = rows.map((row, index) => {
-    const y = rowTop + index * rowHeight, bar = 486 * row.share / max;
-    return `<circle cx="365" cy="${y + 1}" r="5.5" fill="${row.color}"/><text x="382" y="${y + 5}" fill="#ebf3fa" font-family="Arial,sans-serif" font-size="12.5" font-weight="700">${xml(row.name)}</text><text x="868" y="${y + 5}" text-anchor="end" fill="#99a9be" font-family="Arial,sans-serif" font-size="12">${row.share.toFixed(1)}%</text><rect x="382" y="${y + 11}" width="486" height="3.5" rx="1.75" fill="#253448"/><rect x="382" y="${y + 11}" width="${bar.toFixed(2)}" height="3.5" rx="1.75" fill="${row.color}"/>`;
+    const y = rowTop + index * rowHeight;
+    const bar = 520 * row.share / max;
+    const percent = row.share > 0 && row.share < 0.05 ? "<0.1%" : `${row.share.toFixed(1)}%`;
+    return `<g><circle cx="432" cy="${y}" r="5.5" fill="${row.color}"/><text x="450" y="${y + 5}" fill="#edf4ff" font-family="Arial,sans-serif" font-size="14" font-weight="700">${xml(row.name)}</text><text x="970" y="${y + 5}" text-anchor="end" fill="#b4c2d6" font-family="Arial,sans-serif" font-size="13">${percent}</text><rect x="450" y="${y + 12}" width="520" height="4" rx="2" fill="#29364a"/><rect x="450" y="${y + 12}" width="${bar.toFixed(2)}" height="4" rx="2" fill="${row.color}"/></g>`;
   }).join("");
   const center = rows.length
-    ? `<text x="${cx}" y="${cy - 3}" text-anchor="middle" fill="#ebf3fa" font-family="Arial,sans-serif" font-size="18" font-weight="700">${xml(rows[0].name)}</text><text x="${cx}" y="${cy + 18}" text-anchor="middle" fill="#99a9be" font-family="Arial,sans-serif" font-size="10" font-weight="700" letter-spacing=".6">LANGUAGE MIX</text>`
-    : `<text x="${cx}" y="${cy + 5}" text-anchor="middle" fill="#99a9be" font-family="Arial,sans-serif" font-size="12">NO LANGUAGE DATA</text>`;
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><rect width="${width}" height="${height}" rx="22" fill="#101829"/><rect x="1" y="1" width="898" height="${height - 2}" rx="21" fill="none" stroke="#26364a"/><text x="32" y="39" fill="#37dabe" font-family="Arial,sans-serif" font-size="14" font-weight="700" letter-spacing="1.4">MOST USED LANGUAGES</text><text x="32" y="61" fill="#99a9be" font-family="Arial,sans-serif" font-size="11">${USERNAME.toUpperCase()} / ALL REPOSITORIES</text><path d="M32 76H868" stroke="#26364a"/><circle cx="${cx}" cy="${cy}" r="${radius}" fill="none" stroke="#253448" stroke-width="25"/>${slices}${center}${legend}<text x="32" y="${height - 13}" fill="#99a9be" font-family="Arial,sans-serif" font-size="9.5" font-weight="700" letter-spacing=".3">LANGUAGE BYTES · PUBLIC + PRIVATE REPOSITORIES</text></svg>`;
+    ? `<text x="${cx}" y="${cy - 3}" text-anchor="middle" fill="#f4f7fb" font-family="Arial,sans-serif" font-size="25" font-weight="700">${rows[0].share.toFixed(1)}%</text><text x="${cx}" y="${cy + 22}" text-anchor="middle" fill="#b4c2d6" font-family="Arial,sans-serif" font-size="14" font-weight="700">${xml(rows[0].name)}</text>`
+    : `<text x="${cx}" y="${cy + 5}" text-anchor="middle" fill="#b4c2d6" font-family="Arial,sans-serif" font-size="13">NO LANGUAGE DATA</text>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><title>Most used languages across public and private repositories</title><rect width="${width}" height="${height}" rx="24" fill="#101829"/><rect x="1" y="1" width="${width - 2}" height="${height - 2}" rx="23" fill="none" stroke="#26364a"/><text x="36" y="42" fill="#37dabe" font-family="Arial,sans-serif" font-size="15" font-weight="700" letter-spacing="1.4">MOST USED LANGUAGES</text><text x="36" y="67" fill="#b4c2d6" font-family="Arial,sans-serif" font-size="12">${USERNAME.toUpperCase()} · ALL REPOSITORIES</text><path d="M36 86H964" stroke="#26364a"/><circle cx="${cx}" cy="${cy}" r="${radius}" fill="none" stroke="#29364a" stroke-width="27"/>${slices}${center}${legend}</svg>`;
 }
 
 export default async function handler(_request, response) {
