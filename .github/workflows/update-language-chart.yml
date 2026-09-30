@@ -1,4 +1,4 @@
-name: Update interactive language chart
+name: Update language chart
 
 on:
   workflow_dispatch:
@@ -8,50 +8,35 @@ on:
     paths:
       - ".github/workflows/update-language-chart.yml"
       - "scripts/generate_language_chart.py"
-      - "language-chart/index.html"
-      - "language-chart/styles.css"
-      - "language-chart/chart.js"
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 concurrency:
   group: profile-language-chart
   cancel-in-progress: false
 
 jobs:
-  publish:
+  update:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.x"
-      - name: Collect repository language shares
+      - name: Generate compact language chart
         env:
-          GH_TOKEN: ${{ secrets.GH_STATS_TOKEN || secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_STATS_TOKEN }}
           GH_USERNAME: achmad-miftahurrojak
         run: python scripts/generate_language_chart.py
-      - name: Commit updated chart data and preview
+      - name: Commit updated chart
         run: |
-          if git diff --quiet -- language-chart/languages.json assets/most-used-languages.svg; then
+          if git diff --quiet -- assets/most-used-languages.svg; then
             echo "Language chart data is already up to date."
-          else
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add language-chart/languages.json assets/most-used-languages.svg
-            git commit -m "chore: update interactive language chart"
-            git push
+            exit 0
           fi
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: language-chart
-      - name: Deploy interactive chart
-        id: deployment
-        uses: actions/deploy-pages@v4
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/most-used-languages.svg
+          git commit -m "chore: refresh language chart"
+          git push

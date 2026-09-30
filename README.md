@@ -32,11 +32,7 @@ Each hardware repository includes an architecture note, firmware layout, build c
 
 ## Most used languages
 
-<a href="https://achmad-miftahurrojak.github.io/achmad-miftahurrojak/"><img src="assets/most-used-languages.svg" alt="Most used languages across my GitHub repositories. Open the interactive chart." width="100%"></a>
-
-[Open the interactive chart ↗](https://achmad-miftahurrojak.github.io/achmad-miftahurrojak/)
-
-The preview links to an interactive chart. Its donut animates while in view, pauses off-screen, and highlights each language on hover. The weekly workflow includes private repositories when the `GH_STATS_TOKEN` Actions secret has read access to them; otherwise the chart uses only public repositories.
+<p align="center"><img src="assets/most-used-languages.svg" alt="Most used languages across all repositories" width="88%"></p>
 
 ## Contact
 
