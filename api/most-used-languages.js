@@ -51,7 +51,7 @@ function render(languages) {
     const y = rowTop + index * rowHeight;
     const bar = 520 * row.share / max;
     const percent = row.share > 0 && row.share < 0.05 ? "<0.1%" : `${row.share.toFixed(1)}%`;
-    return `<g><circle cx="432" cy="${y}" r="5.5" fill="${row.color}"/><text x="450" y="${y + 5}" fill="#edf4ff" font-family="Arial,sans-serif" font-size="14" font-weight="700">${xml(row.name)}</text><text x="970" y="${y + 5}" text-anchor="end" fill="#b4c2d6" font-family="Arial,sans-serif" font-size="13">${percent}</text><rect x="450" y="${y + 12}" width="520" height="4" rx="2" fill="#29364a"/><rect x="450" y="${y + 12}" width="${bar.toFixed(2)}" height="4" rx="2" fill="${row.color}"/></g>`;
+    return `<g><circle cx="432" cy="${y}" r="5.5" fill="${row.color}"/><text x="450" y="${y + 5}" fill="#edf4ff" font-family="Arial,sans-serif" font-size="14" font-weight="700">${xml(row.name)}</text><text x="970" y="${y + 5}" text-anchor="end" fill="#b4c2d6" font-family="Arial,sans-serif" font-size="13">${xml(percent)}</text><rect x="450" y="${y + 12}" width="520" height="4" rx="2" fill="#29364a"/><rect x="450" y="${y + 12}" width="${bar.toFixed(2)}" height="4" rx="2" fill="${row.color}"/></g>`;
   }).join("");
   const center = rows.length
     ? `<text x="${cx}" y="${cy - 3}" text-anchor="middle" fill="#f4f7fb" font-family="Arial,sans-serif" font-size="25" font-weight="700">${rows[0].share.toFixed(1)}%</text><text x="${cx}" y="${cy + 22}" text-anchor="middle" fill="#b4c2d6" font-family="Arial,sans-serif" font-size="14" font-weight="700">${xml(rows[0].name)}</text>`
