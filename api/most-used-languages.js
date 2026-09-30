@@ -33,32 +33,45 @@ const xml = value => String(value).replace(/[&<>"']/g, char => ({"&":"&amp;","<"
 
 function render(languages) {
   const width = 1000;
-  const rowHeight = 28;
-  const rowTop = 112;
-  const height = Math.max(250, rowTop + rowHeight * languages.length + 28);
+  const height = 500;
+  const rowHeight = 35;
+  const rowTop = 165;
   const total = languages.reduce((sum, row) => sum + row.bytes, 0);
-  const rows = languages.map(row => ({ ...row, share: total ? row.bytes / total * 100 : 0 }));
-  const cx = 210, cy = height / 2 + 4, radius = 88, circumference = 2 * Math.PI * radius;
-  let offset = 0;
-  const slices = rows.map(row => {
-    const arc = circumference * row.share / 100;
-    const svg = `<circle cx="${cx}" cy="${cy}" r="${radius}" fill="none" stroke="${row.color}" stroke-width="27" stroke-dasharray="${arc.toFixed(2)} ${circumference.toFixed(2)}" stroke-dashoffset="${(-circumference * offset / 100).toFixed(2)}" transform="rotate(-90 ${cx} ${cy})"/>`;
-    offset += row.share;
-    return svg;
+  const rows = languages.slice(0, 8).map(row => ({ ...row, share: total ? row.bytes / total * 100 : 0 }));
+  const cx = 270, cy = 300, radius = 136;
+  const angleAt = index => -Math.PI / 2 + (Math.PI * 2 * index) / Math.max(rows.length, 1);
+  const pointAt = (index, distance) => ({
+    x: cx + Math.cos(angleAt(index)) * distance,
+    y: cy + Math.sin(angleAt(index)) * distance,
+  });
+  const polygonPoints = distances => distances.map((distance, index) => {
+    const point = pointAt(index, distance);
+    return `${point.x.toFixed(2)},${point.y.toFixed(2)}`;
+  }).join(" ");
+  const grid = rows.length ? [0.25, 0.5, 0.75, 1].map(level =>
+    `<polygon points="${polygonPoints(rows.map(() => radius * level))}" fill="none" stroke="#29364a" stroke-width="1"/>`
+  ).join("") : "";
+  const spokes = rows.map((_row, index) => {
+    const point = pointAt(index, radius);
+    return `<path d="M${cx} ${cy}L${point.x.toFixed(2)} ${point.y.toFixed(2)}" stroke="#29364a" stroke-width="1"/>`;
   }).join("");
-  const max = Math.max(...rows.map(row => row.share), 1);
+  const max = Math.max(rows[0]?.share || 0, 1);
+  const area = rows.length
+    ? `<polygon points="${polygonPoints(rows.map(row => radius * row.share / max))}" fill="#38bdf8" fill-opacity=".18" stroke="#38bdf8" stroke-width="2.5" stroke-linejoin="round"/>`
+    : "";
+  const points = rows.map((row, index) => {
+    const point = pointAt(index, radius * row.share / max);
+    return `<circle cx="${point.x.toFixed(2)}" cy="${point.y.toFixed(2)}" r="5" fill="${row.color}" stroke="#101829" stroke-width="2"/>`;
+  }).join("");
   const legend = rows.map((row, index) => {
     const y = rowTop + index * rowHeight;
-    const bar = 520 * row.share / max;
+    const bar = 359 * row.share / max;
     const percent = row.share > 0 && row.share < 0.05 ? "<0.1%" : `${row.share.toFixed(1)}%`;
-    return `<g><circle cx="432" cy="${y}" r="5.5" fill="${row.color}"/><text x="450" y="${y + 5}" fill="#edf4ff" font-family="Arial,sans-serif" font-size="14" font-weight="700">${xml(row.name)}</text><text x="970" y="${y + 5}" text-anchor="end" fill="#b4c2d6" font-family="Arial,sans-serif" font-size="13">${xml(percent)}</text><rect x="450" y="${y + 12}" width="520" height="4" rx="2" fill="#29364a"/><rect x="450" y="${y + 12}" width="${bar.toFixed(2)}" height="4" rx="2" fill="${row.color}"/></g>`;
+    return `<g><circle cx="585" cy="${y}" r="5.5" fill="${row.color}"/><text x="603" y="${y + 5}" fill="#edf4ff" font-family="Arial,sans-serif" font-size="14" font-weight="700">${xml(row.name)}</text><text x="962" y="${y + 5}" text-anchor="end" fill="#b4c2d6" font-family="Arial,sans-serif" font-size="13">${xml(percent)}</text><rect x="603" y="${y + 13}" width="359" height="4" rx="2" fill="#29364a"/><rect x="603" y="${y + 13}" width="${bar.toFixed(2)}" height="4" rx="2" fill="${row.color}"/></g>`;
   }).join("");
-  const center = rows.length
-    ? `<text x="${cx}" y="${cy - 3}" text-anchor="middle" fill="#f4f7fb" font-family="Arial,sans-serif" font-size="25" font-weight="700">${rows[0].share.toFixed(1)}%</text><text x="${cx}" y="${cy + 22}" text-anchor="middle" fill="#b4c2d6" font-family="Arial,sans-serif" font-size="14" font-weight="700">${xml(rows[0].name)}</text>`
-    : `<text x="${cx}" y="${cy + 5}" text-anchor="middle" fill="#b4c2d6" font-family="Arial,sans-serif" font-size="13">NO LANGUAGE DATA</text>`;
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><title>Most used languages across public and private repositories</title><rect width="${width}" height="${height}" rx="24" fill="#101829"/><rect x="1" y="1" width="${width - 2}" height="${height - 2}" rx="23" fill="none" stroke="#26364a"/><text x="36" y="42" fill="#37dabe" font-family="Arial,sans-serif" font-size="15" font-weight="700" letter-spacing="1.4">MOST USED LANGUAGES</text><text x="36" y="67" fill="#b4c2d6" font-family="Arial,sans-serif" font-size="12">${USERNAME.toUpperCase()} · ALL REPOSITORIES</text><path d="M36 86H964" stroke="#26364a"/><circle cx="${cx}" cy="${cy}" r="${radius}" fill="none" stroke="#29364a" stroke-width="27"/>${slices}${center}${legend}</svg>`;
+  const empty = rows.length ? "" : `<text x="${cx}" y="${cy + 5}" text-anchor="middle" fill="#b4c2d6" font-family="Arial,sans-serif" font-size="13">NO LANGUAGE DATA</text>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><title>Top eight languages across all repositories</title><desc>Radar chart of language byte shares with exact percentages in the legend.</desc><rect width="${width}" height="${height}" rx="24" fill="#101829"/><rect x="1" y="1" width="${width - 2}" height="${height - 2}" rx="23" fill="none" stroke="#26364a"/><text x="36" y="42" fill="#37dabe" font-family="Arial,sans-serif" font-size="15" font-weight="700" letter-spacing="1.4">MOST USED LANGUAGES</text><text x="36" y="67" fill="#b4c2d6" font-family="Arial,sans-serif" font-size="12">ALL REPOSITORIES · TOP 8</text><path d="M36 86H964" stroke="#26364a"/>${grid}${spokes}${area}${points}${empty}${legend}</svg>`;
 }
-
 export default async function handler(_request, response) {
   const token = process.env.GH_STATS_TOKEN;
   if (!token) return response.status(503).send("Missing GH_STATS_TOKEN environment variable");
