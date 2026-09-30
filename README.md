@@ -32,7 +32,7 @@ Each hardware repository includes an architecture note, firmware layout, build c
 
 ## Most used languages
 
-<p align="center"><img src="assets/most-used-languages.svg" alt="Most used languages across all repositories" width="88%"></p>
+<p align="center"><img src="https://achmad-miftahurrojak.vercel.app/api/most-used-languages" alt="Most used languages across all repositories" width="88%"></p>
 
 ## Contact
 
