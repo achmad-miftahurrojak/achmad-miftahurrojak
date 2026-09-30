@@ -10,7 +10,7 @@ Embedded Systems & IoT Engineer
 
 Building field-ready monitoring and early-warning systems with microcontrollers, sensors, and reliable communication links.
 
-[Projects](#selected-projects) · [Hardware stack](#hardware-stack) · [GitHub](https://github.com/achmad-miftahurrojak) · [Contact](#contact)
+[Projects](#selected-projects) · [Most used languages](#most-used-languages) · [GitHub](https://github.com/achmad-miftahurrojak) · [Contact](#contact)
 
 </div>
 
@@ -30,9 +30,13 @@ I work on small embedded systems that measure real conditions, make a local deci
 
 Each hardware repository includes an architecture note, firmware layout, build commands, and configuration boundaries for local secrets.
 
-## Hardware stack
+## Most used languages
 
-`C++` `C` `ESP32` `Arduino` `PlatformIO` `LoRa` `GSM` `MQTT` `SD card` `RTC`
+<!-- Generated weekly by .github/workflows/update-language-chart.yml. -->
+
+![Animated chart of languages used across my GitHub repositories](assets/most-used-languages.gif)
+
+Language shares are calculated from GitHub's per-repository language byte counts across all repositories the workflow token can access, including private repositories. Only language names and their relative shares appear in this chart. To include private repositories, add a `GH_STATS_TOKEN` Actions secret with read access to their repository metadata and contents, then run **Update language chart** from the Actions tab.
 
 ## Contact
 
